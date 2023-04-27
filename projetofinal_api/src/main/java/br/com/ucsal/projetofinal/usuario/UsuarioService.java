@@ -2,6 +2,7 @@ package br.com.ucsal.projetofinal.usuario;
 
 import br.com.ucsal.projetofinal.exceptions.AtualizarException;
 import br.com.ucsal.projetofinal.exceptions.InserirException;
+import br.com.ucsal.projetofinal.exceptions.LoginNaoEncontradoException;
 import br.com.ucsal.projetofinal.perfil.PerfilRepository;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +55,10 @@ public class UsuarioService {
         }
     }
 
-    public Usuario listarPorLogin(String login) {
-        return usuarioRepository.findByLogin(login);
+    public Usuario listarPorLogin(String login) throws LoginNaoEncontradoException {
+        Optional<Usuario> usuario = Optional.ofNullable(usuarioRepository.findByLogin(login));
+        if (usuario.isEmpty()) {
+            throw new LoginNaoEncontradoException("Não foi possível encontrar o login " + login);
+        } else return usuario.get();
     }
 }

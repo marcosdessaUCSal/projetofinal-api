@@ -53,25 +53,17 @@ public class RespostaService {
         }
     }
 
-    public List<RespostaPorcentagemResponseDTO> listarPorIdUsuario(Long id) {
+    public List<RespostaPorcentagemResponseDTO> listarPorIdUsuario(Long id) throws IdNaoEncontradoException {
         List<RespostaPorcentagemResponseDTO> respostas = respostaRepository.findByUsuarioId(id);
-        /*for (RespostaPorcentagemResponseDTO r: respostas) {
-            Optional<Tarefa> tarefa = tarefaRepository.findById(r.getTarefaId());
-            r.setTarefa(tarefa.get());
-            //respostas.add(r);
-        }*/
-
-        return respostas;
+        if (respostas.isEmpty()) {
+            throw new IdNaoEncontradoException("Não foi possível encontrar resposta");
+        } else {
+            return respostas;
+        }
     }
 
     public List<RespostaPorcentagemResponseDTO> listarPorIdTarefa(Long id) throws IdNaoEncontradoException {
         List<RespostaPorcentagemResponseDTO> listaRetornada = respostaRepository.findByTarefaId(id);
-        /*for (Resposta resposta : respostaRepository.findByTarefaId(id)) {
-            RespostaPorcentagemResponseDTO response = new RespostaPorcentagemResponseDTO(resposta);
-            Resultado resultado = resultadoRepository.findByRespostaId(resposta.getId());
-            response.setPorcentagemAcerto(resultado.getPorcentagem());
-            listaRetornada.add(response);
-        }*/
         if (listaRetornada.isEmpty()) {
             throw new IdNaoEncontradoException("Não foi possível encontrar tarefa pelo id " + id);
         } else {

@@ -1,5 +1,6 @@
 package br.com.ucsal.projetofinal.config.autenticacao;
 
+import br.com.ucsal.projetofinal.exceptions.LoginNaoEncontradoException;
 import br.com.ucsal.projetofinal.perfil.Perfil;
 import br.com.ucsal.projetofinal.usuario.Usuario;
 import br.com.ucsal.projetofinal.usuario.UsuarioService;
@@ -27,7 +28,12 @@ public class AutenticacaoService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = usuarioService.listarPorLogin(username);
+        Usuario usuario = null;
+        try {
+            usuario = usuarioService.listarPorLogin(username);
+        } catch (LoginNaoEncontradoException e) {
+            throw new RuntimeException(e.getMessage());
+        }
         if (usuario != null) {
 
             return usuario;

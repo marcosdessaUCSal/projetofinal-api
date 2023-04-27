@@ -3,6 +3,7 @@ package br.com.ucsal.projetofinal.config.autenticacao;
 import br.com.ucsal.projetofinal.config.token.LoginForm;
 import br.com.ucsal.projetofinal.config.token.TokenDTO;
 import br.com.ucsal.projetofinal.config.token.TokenService;
+import br.com.ucsal.projetofinal.exceptions.LoginNaoEncontradoException;
 import br.com.ucsal.projetofinal.usuario.Usuario;
 import br.com.ucsal.projetofinal.usuario.UsuarioService;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class AutenticacaoController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<TokenDTO> autenticarLogin(@RequestBody @Valid LoginForm login){
+    public ResponseEntity<TokenDTO> autenticarLogin(@RequestBody @Valid LoginForm login) throws LoginNaoEncontradoException {
         UsernamePasswordAuthenticationToken dados = login.converter();
         Usuario usuario = usuarioService.listarPorLogin(dados.getPrincipal().toString());
         try {

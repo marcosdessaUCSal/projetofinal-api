@@ -37,11 +37,13 @@ public class RespostaController {
         }
     }
 
-    @GetMapping("/usuario/{id}")
-    public ResponseEntity<List<RespostaPorcentagemResponseDTO>> listarPorIdUsuario(@PathVariable Long id) {
-        List<RespostaPorcentagemResponseDTO> respostas = respostaService.listarPorIdUsuario(id);
-        if (respostas.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        @GetMapping("/usuario/{id}")
+    public ResponseEntity listarPorIdUsuario(@PathVariable Long id) {
+        List<RespostaPorcentagemResponseDTO> respostas = null;
+        try {
+            respostas = respostaService.listarPorIdUsuario(id);
+        } catch (IdNaoEncontradoException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
         return ResponseEntity.ok().body(respostas);
     }

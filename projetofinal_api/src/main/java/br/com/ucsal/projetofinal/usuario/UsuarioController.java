@@ -2,6 +2,7 @@ package br.com.ucsal.projetofinal.usuario;
 
 import br.com.ucsal.projetofinal.exceptions.AtualizarException;
 import br.com.ucsal.projetofinal.exceptions.InserirException;
+import br.com.ucsal.projetofinal.exceptions.LoginNaoEncontradoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,12 @@ public class UsuarioController {
 
     @GetMapping("/login/{login}")
     public ResponseEntity listarPorLogin(@PathVariable String login) {
-        Usuario usuario = usuarioService.listarPorLogin(login);
+        Usuario usuario = null;
+        try {
+            usuario = usuarioService.listarPorLogin(login);
+        } catch (LoginNaoEncontradoException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
         return ResponseEntity.ok(new UsuarioResponseDto(usuario));
     }
 }
