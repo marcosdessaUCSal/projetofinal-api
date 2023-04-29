@@ -1,6 +1,7 @@
 package br.com.ucsal.projetofinal.resposta;
 
 import br.com.ucsal.projetofinal.exceptions.ArquivoNaoEncontradoException;
+import br.com.ucsal.projetofinal.exceptions.AtualizarException;
 import br.com.ucsal.projetofinal.exceptions.IdNaoEncontradoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -81,8 +82,8 @@ public class RespostaController {
     public ResponseEntity atualizar(@PathVariable Long id, @RequestBody Resposta resposta) {
         try {
             return ResponseEntity.ok().body(new RespostaResponseDto(respostaService.atualizar(id, resposta)));
-        } catch (Exception ex) {
-            return ResponseEntity.badRequest().build();
+        } catch (AtualizarException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

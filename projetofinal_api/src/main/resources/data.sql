@@ -13,7 +13,8 @@ INSERT INTO tarefa(descricao, status, visibilidade, titulo, usuario_id)
 values
        ('Digite numeros separados por espaço que a soma seja 10', 0, 0, 'Até 10', 3),
        ('Mostre a divisão entre dois numeros', 0, 0, 'Divisão', 3),
-       ('Mostre o inverso da palavra', 0, 0, 'Inverso', 3);
+       ('Mostre o inverso da palavra', 0, 0, 'Inverso', 3),
+       ('Diga se o número digitado é primo', 0, 0, 'Primo', 3);
 
 INSERT INTO caso_teste(comparacao, entrada, flag_exibir, nome_teste, saida, tarefa_id)
 values
@@ -26,7 +27,10 @@ values
        (1, 'oi', true, 'Teste 1', 'io', 3),
        (1, 'casa', true, 'Teste 2', 'asac', 3),
        (1, 'papel', false, 'Teste 3', 'lepap', 3),
-       (1, 'tomada', false, 'Teste 4', 'adamot', 3);
+       (1, 'tomada', false, 'Teste 4', 'adamot', 3),
+       (1, '23', true, 'Número Primo', 'primo', 4),
+       (1, '21', true, 'Número Primo', 'não primo', 4),
+       (1, '51', true, 'Número Primo', 'não primo', 4);
 
 INSERT INTO USUARIO_PERFIL(USUARIO_ID, PERFIL_ID)
 values (1, 1),(2, 2),(3, 3),(4,2);

@@ -2,6 +2,7 @@ package br.com.ucsal.projetofinal.resposta;
 
 import br.com.ucsal.projetofinal.casoteste.CasoTeste;
 import br.com.ucsal.projetofinal.exceptions.ArquivoNaoEncontradoException;
+import br.com.ucsal.projetofinal.exceptions.AtualizarException;
 import br.com.ucsal.projetofinal.exceptions.IdNaoEncontradoException;
 import br.com.ucsal.projetofinal.itemProva.ItemProvaRespository;
 import br.com.ucsal.projetofinal.prova.ProvaRepository;
@@ -86,14 +87,19 @@ public class RespostaService {
         return respostaRepository.save(resposta);
     }
 
-    public Resposta atualizar(Long id, Resposta resposta) {
-        return respostaRepository.findById(id).map(
+    public Resposta atualizar(Long id, Resposta resposta) throws AtualizarException {
+        Resposta resp = respostaRepository.findById(id).map(
                 response -> {
                     response.setCodigo(resposta.getCodigo());
                     Resposta novaResposta = respostaRepository.save(response);
                     return novaResposta;
                 }
         ).orElse(null);
+        if (resp != null) {
+            return resp;
+        } else {
+            throw new AtualizarException("Impossível atualizar resposta");
+        }
     }
 
     public Resultado gerarResultado(Resposta resposta) {

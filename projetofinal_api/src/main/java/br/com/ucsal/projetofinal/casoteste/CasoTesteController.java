@@ -1,9 +1,8 @@
 package br.com.ucsal.projetofinal.casoteste;
 
-import br.com.ucsal.projetofinal.tarefa.TarefaRepository;
-import br.com.ucsal.projetofinal.usuario.UsuarioResponseDto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import br.com.ucsal.projetofinal.exceptions.AtualizarException;
+import br.com.ucsal.projetofinal.exceptions.IdNaoEncontradoException;
+import br.com.ucsal.projetofinal.exceptions.InserirException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,34 +29,40 @@ public class CasoTesteController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> listarPorId(@PathVariable Long id) {
-        Optional<CasoTeste> casoTeste = casoTesteService.listarPorId(id);
-        if (casoTeste.isPresent()) {
-            return ResponseEntity.ok(casoTeste);
+        try {
+            Optional<CasoTeste> casoTeste = casoTesteService.listarPorId(id);
+            return ResponseEntity.ok().body(casoTeste);
+        } catch (IdNaoEncontradoException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @GetMapping("/tarefa/{id}")
     public ResponseEntity<?> listarPorTarefa(@PathVariable Long id) {
-        List<CasoTeste> casoTestes = casoTesteService.listarPorTarefa(id);
-
-        return ResponseEntity.ok().body(casoTestes);
-
-
+        List<CasoTeste> casoTestes = null;
+        try {
+            casoTestes = casoTesteService.listarPorTarefa(id);
+            return ResponseEntity.ok().body(casoTestes);
+        } catch (IdNaoEncontradoException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/")
-    public ResponseEntity<CasoTesteResponseDto> inserir(@RequestBody @Valid CasoTesteRequestDto casoTesteRequestDto) {
-        return ResponseEntity.ok().body(new CasoTesteResponseDto(casoTesteService.inserir(casoTesteRequestDto)));
+    public ResponseEntity inserir(@RequestBody @Valid CasoTesteRequestDto casoTesteRequestDto) {
+        try {
+            return ResponseEntity.ok().body(new CasoTesteResponseDto(casoTesteService.inserir(casoTesteRequestDto)));
+        } catch (InserirException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity atualizar(@PathVariable Long id, @RequestBody CasoTeste casoTeste) {
         try {
             return ResponseEntity.ok().body(new CasoTesteResponseDto((casoTesteService.atualizar(id, casoTeste))));
-        } catch (Exception ex) {
-            return ResponseEntity.badRequest().build();
+        } catch (AtualizarException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
