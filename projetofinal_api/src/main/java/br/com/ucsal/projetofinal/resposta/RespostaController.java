@@ -73,9 +73,14 @@ public class RespostaController {
 
     @PostMapping("/")
     public ResponseEntity inserir(@RequestBody @Valid RespostaRequestDto respostaRequestDto) {
-        Resposta resposta = respostaService.inserir(respostaRequestDto);
-        respostaService.gerarResultado(resposta);
-        return ResponseEntity.ok().body(new RespostaResponseDto(resposta));
+        Resposta resposta = null;
+        try {
+            resposta = respostaService.inserir(respostaRequestDto);
+            respostaService.gerarResultado(resposta);
+            return ResponseEntity.ok().body(new RespostaResponseDto(resposta));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")

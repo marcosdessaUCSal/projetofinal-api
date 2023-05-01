@@ -29,8 +29,8 @@ public class RespostaRequestDto {
     }
 
     public Resposta toModel(UsuarioRepository usuarioRepository, TarefaRepository tarefaRepository, ItemProvaRespository itemProvaRespository) {
-        Usuario usuario = usuarioRepository.findById(usuarioId).orElseThrow(() -> new RuntimeException("Id de usuario não encontrado"));
-        Tarefa tarefa = tarefaRepository.buscarTarefa(tarefaId).orElseThrow(() -> new RuntimeException("Id de tarefa não encontrada"));
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElseThrow(() -> new RuntimeException("Impossível encontrar usuário com id " + usuarioId));
+        Tarefa tarefa = tarefaRepository.buscarTarefa(tarefaId).orElseThrow(() -> new RuntimeException("Impossível encontrar tarefa com id " + tarefaId));
         ItemProva itemProva = null;
         if(itemProvaId != null)
             itemProva = itemProvaRespository.findById(itemProvaId).orElse(null);
